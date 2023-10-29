@@ -1,0 +1,9 @@
+.directory
+/.direnv
+/.env
+/.idea
+/.rust-src
+/target
+/teledump.db
+/teledump.session
+result*
