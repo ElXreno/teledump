@@ -74,6 +74,7 @@ impl Db {
             binary_data_downloaded: ActiveValue::Set(false),
             binary_data_path: ActiveValue::Set(None),
             binary_data_type: ActiveValue::Set(None),
+            binary_data_reference_expired: ActiveValue::Set(false),
             date: ActiveValue::Set(message.date().to_string()),
         };
 
@@ -130,6 +131,7 @@ impl Db {
         let message = entity::prelude::Messages::find()
             .filter(entity::messages::Column::HasBinaryData.eq(true))
             .filter(entity::messages::Column::BinaryDataDownloaded.eq(false))
+            .filter(entity::messages::Column::BinaryDataReferenceExpired.eq(false))
             .one(&self.db)
             .await;
 
@@ -146,12 +148,14 @@ impl Db {
         downloaded: bool,
         path: Option<String>,
         media_type: Option<String>,
+        expired: bool,
     ) -> anyhow::Result<()> {
         let mut message: entity::messages::ActiveModel = model.into();
 
         message.binary_data_downloaded = ActiveValue::Set(downloaded);
         message.binary_data_path = ActiveValue::Set(path);
         message.binary_data_type = ActiveValue::Set(media_type);
+        message.binary_data_reference_expired = ActiveValue::Set(expired);
 
         message.update(&self.db).await?;
         Ok(())

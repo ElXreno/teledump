@@ -1,6 +1,7 @@
+use std::error::Error;
 use std::ffi::OsStr;
 use std::io;
-use std::io::{BufRead, Write};
+use std::io::{BufRead, ErrorKind, Write};
 use std::path::Path;
 use std::sync::Arc;
 use std::thread::sleep;
@@ -307,6 +308,7 @@ impl Bot {
                     let mut media_path = None;
                     if let Some(media) = message.media() {
                         let mut restart = false;
+                        let mut expired = false;
                         match media {
                             Photo(_) | Document(_) | Sticker(_) | Contact(_) => {
                                 media_type = Some(get_file_extension(&media));
@@ -345,6 +347,11 @@ impl Bot {
                                             .download_media(media_path.clone().unwrap())
                                             .await
                                         {
+                                            if e.to_string().contains("FILE_REFERENCE_EXPIRED") {
+                                                warn!("File reference expired for media in message id {}", message.id());
+                                                expired = true;
+                                                break;
+                                            }
                                             if attempt >= 3 {
                                                 warn!("Failed to download media from message {}, restarting...", message.id());
                                                 restart = true;
@@ -355,12 +362,19 @@ impl Bot {
                                             sleep(Duration::from_secs(5));
                                         }
 
-                                        info!("Download media from message {} done!", message.id());
+                                        if expired || restart {
+                                            info!(
+                                                "Download media from message {} done!",
+                                                message.id()
+                                            );
+                                        }
                                     } else {
                                         warn!(
                                             "Bypassing media download from message {}...",
                                             message.id()
-                                        )
+                                        );
+                                        media_path = None;
+                                        media_type = None;
                                     }
                                 }
                             }
@@ -374,6 +388,7 @@ impl Bot {
                                     true,
                                     media_path,
                                     media_type,
+                                    expired,
                                 )
                                 .await?;
                         }
