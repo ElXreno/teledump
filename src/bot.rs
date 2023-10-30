@@ -306,6 +306,7 @@ impl Bot {
                     let mut media_type = None;
                     let mut media_path = None;
                     if let Some(media) = message.media() {
+                        let mut restart = false;
                         match media {
                             Photo(_) | Document(_) | Sticker(_) | Contact(_) => {
                                 media_type = Some(get_file_extension(&media));
@@ -339,11 +340,18 @@ impl Bot {
 
                                 if let Photo(photo) = media {
                                     if photo.photo.photo.is_some() {
+                                        let mut attempt = 0;
                                         while let Err(e) = message
                                             .download_media(media_path.clone().unwrap())
                                             .await
                                         {
-                                            warn!("Failed to download media from message {}, retrying after 5 secs... {}", message.id(), e);
+                                            if attempt >= 3 {
+                                                warn!("Failed to download media from message {}, restarting...", message.id());
+                                                restart = true;
+                                                break;
+                                            }
+                                            attempt += 1;
+                                            warn!("Failed to download media from message {}, retrying after 5 secs, attempt {}... {}", message.id(), attempt, e);
                                             sleep(Duration::from_secs(5));
                                         }
 
@@ -359,9 +367,16 @@ impl Bot {
                             _ => {}
                         };
 
-                        self.db
-                            .save_message_media_status(message_model, true, media_path, media_type)
-                            .await?;
+                        if !restart {
+                            self.db
+                                .save_message_media_status(
+                                    message_model,
+                                    true,
+                                    media_path,
+                                    media_type,
+                                )
+                                .await?;
+                        }
                     }
                 }
             }
