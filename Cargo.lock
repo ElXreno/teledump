@@ -1128,7 +1128,7 @@ dependencies = [
 [[package]]
 name = "grammers-client"
 version = "0.4.0"
-source = "git+https://github.com/Lonami/grammers#dca1e71b2d3ff4833c7ac1759a1ae04d22d34786"
+source = "git+https://github.com/ElXreno/grammers#0adbb1c4a2a3588d77b2d601729ac3bcafb8312d"
 dependencies = [
  "chrono",
  "futures-util",
@@ -1149,7 +1149,7 @@ dependencies = [
 [[package]]
 name = "grammers-crypto"
 version = "0.4.0"
-source = "git+https://github.com/Lonami/grammers#dca1e71b2d3ff4833c7ac1759a1ae04d22d34786"
+source = "git+https://github.com/ElXreno/grammers#0adbb1c4a2a3588d77b2d601729ac3bcafb8312d"
 dependencies = [
  "aes",
  "getrandom",
@@ -1164,7 +1164,7 @@ dependencies = [
 [[package]]
 name = "grammers-mtproto"
 version = "0.4.0"
-source = "git+https://github.com/Lonami/grammers#dca1e71b2d3ff4833c7ac1759a1ae04d22d34786"
+source = "git+https://github.com/ElXreno/grammers#0adbb1c4a2a3588d77b2d601729ac3bcafb8312d"
 dependencies = [
  "bytes",
  "crc32fast",
@@ -1180,7 +1180,7 @@ dependencies = [
 [[package]]
 name = "grammers-mtsender"
 version = "0.4.0"
-source = "git+https://github.com/Lonami/grammers#dca1e71b2d3ff4833c7ac1759a1ae04d22d34786"
+source = "git+https://github.com/ElXreno/grammers#0adbb1c4a2a3588d77b2d601729ac3bcafb8312d"
 dependencies = [
  "bytes",
  "futures-util",
@@ -1193,7 +1193,7 @@ dependencies = [
 [[package]]
 name = "grammers-session"
 version = "0.4.1"
-source = "git+https://github.com/Lonami/grammers#dca1e71b2d3ff4833c7ac1759a1ae04d22d34786"
+source = "git+https://github.com/ElXreno/grammers#0adbb1c4a2a3588d77b2d601729ac3bcafb8312d"
 dependencies = [
  "grammers-crypto",
  "grammers-tl-gen",
@@ -1205,7 +1205,7 @@ dependencies = [
 [[package]]
 name = "grammers-tl-gen"
 version = "0.4.1"
-source = "git+https://github.com/Lonami/grammers#dca1e71b2d3ff4833c7ac1759a1ae04d22d34786"
+source = "git+https://github.com/ElXreno/grammers#0adbb1c4a2a3588d77b2d601729ac3bcafb8312d"
 dependencies = [
  "grammers-tl-parser",
 ]
@@ -1213,7 +1213,7 @@ dependencies = [
 [[package]]
 name = "grammers-tl-parser"
 version = "1.1.0"
-source = "git+https://github.com/Lonami/grammers#dca1e71b2d3ff4833c7ac1759a1ae04d22d34786"
+source = "git+https://github.com/ElXreno/grammers#0adbb1c4a2a3588d77b2d601729ac3bcafb8312d"
 dependencies = [
  "crc32fast",
 ]
@@ -1221,7 +1221,7 @@ dependencies = [
 [[package]]
 name = "grammers-tl-types"
 version = "0.4.0"
-source = "git+https://github.com/Lonami/grammers#dca1e71b2d3ff4833c7ac1759a1ae04d22d34786"
+source = "git+https://github.com/ElXreno/grammers#0adbb1c4a2a3588d77b2d601729ac3bcafb8312d"
 dependencies = [
  "grammers-tl-gen",
  "grammers-tl-parser",
@@ -2970,9 +2970,9 @@ checksum = "290d54ea6f91c969195bdbcd7442c8c2a2ba87da8bf60a7ee86a235d4bc1e125"
 
 [[package]]
 name = "subtle"
-version = "2.4.1"
+version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6bdef32e8150c2a081110b42772ffe7d7c9032b606bc226c8260fd97e0976601"
+checksum = "81cdd64d312baedb58e21336b31bc043b77e01cc99033ce76ef539f78e965ebc"
 
 [[package]]
 name = "syn"
@@ -3540,18 +3540,18 @@ dependencies = [
 
 [[package]]
 name = "zerocopy"
-version = "0.7.15"
+version = "0.7.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81ba595b9f2772fbee2312de30eeb80ec773b4cb2f1e8098db024afadda6c06f"
+checksum = "dd66a62464e3ffd4e37bd09950c2b9dd6c4f8767380fabba0d523f9a775bc85a"
 dependencies = [
  "zerocopy-derive",
 ]
 
 [[package]]
 name = "zerocopy-derive"
-version = "0.7.15"
+version = "0.7.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "772666c41fb6dceaf520b564b962d738a8e1a83b41bd48945f50837aed78bb1d"
+checksum = "255c4596d41e6916ced49cfafea18727b24d67878fa180ddfd69b9df34fd1726"
 dependencies = [
  "proc-macro2",
  "quote",

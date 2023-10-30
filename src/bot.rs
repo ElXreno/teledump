@@ -337,14 +337,24 @@ impl Bot {
                                     media_name
                                 ));
 
-                                while let Err(e) =
-                                    message.download_media(media_path.clone().unwrap()).await
-                                {
-                                    warn!("Failed to download media from message {}, retrying after 5 secs... {}", message.id(), e);
-                                    sleep(Duration::from_secs(5));
-                                }
+                                if let Photo(photo) = media {
+                                    if photo.photo.photo.is_some() {
+                                        while let Err(e) = message
+                                            .download_media(media_path.clone().unwrap())
+                                            .await
+                                        {
+                                            warn!("Failed to download media from message {}, retrying after 5 secs... {}", message.id(), e);
+                                            sleep(Duration::from_secs(5));
+                                        }
 
-                                info!("Download media from message {} done!", message.id());
+                                        info!("Download media from message {} done!", message.id());
+                                    } else {
+                                        warn!(
+                                            "Bypassing media download from message {}...",
+                                            message.id()
+                                        )
+                                    }
+                                }
                             }
                             _ => {}
                         };
