@@ -156,9 +156,8 @@ impl Bot {
                 self.db.get_last_loaded_message_id_by_chat(chat.id()).await;
             while let Some(message) = messages.next().await? {
                 if first_message {
-                    if message.date().to_string()
-                        != self.db.get_last_message_by_chat(chat.id()).await?.date
-                    {
+                    let last_message = self.db.get_last_message_by_chat(chat.id()).await;
+                    if last_message.is_err() || message.date().to_string() != last_message?.date {
                         info!("Data for chat {} is outdated, full resync...", chat.id());
                     } else if let Ok(last_message_id) = last_loaded_message_id_by_chat {
                         info!(
