@@ -141,7 +141,6 @@ impl Bot {
 
         for chat in &chats {
             let mut messages = self.client_handler.iter_messages(chat);
-            messages = messages.limit(10);
             let total_messages = messages.total().await?;
 
             println!(
