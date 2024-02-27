@@ -4,7 +4,7 @@ use log::info;
 use migration::{Migrator, MigratorTrait};
 use moka::future::Cache;
 use sea_orm::{
-    sea_query, ActiveModelTrait, ActiveValue, ColumnTrait, DatabaseConnection, DbErr, EntityTrait,
+    sea_query, ActiveModelTrait, ActiveValue, ColumnTrait, DatabaseConnection, EntityTrait,
     PaginatorTrait, QueryFilter, QueryOrder,
 };
 use std::time::Duration;

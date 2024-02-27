@@ -1,7 +1,7 @@
-use std::error::Error;
+
 use std::ffi::OsStr;
 use std::io;
-use std::io::{BufRead, ErrorKind, Write};
+use std::io::{BufRead, Write};
 use std::path::Path;
 use std::sync::Arc;
 use std::thread::sleep;
@@ -197,7 +197,7 @@ impl Bot {
                 Update::NewMessage(message) if !message.outgoing() => {
                     match self.handle_message(&message).await {
                         Ok(_) => {}
-                        Err(err) => {}
+                        Err(_err) => {}
                     };
                 }
                 Update::NewMessage(message) if message.outgoing() => {
