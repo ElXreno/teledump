@@ -85,7 +85,7 @@
             {
               inherit buildInputs;
 
-              nativeBuildInputs = with pkgsWithouOverlays; [ sea-orm-cli ] ++ nativeBuildInputs;
+              nativeBuildInputs = (with pkgsWithouOverlays; [ sea-orm-cli ]) ++ (with pkgs; [ rustfmt rust-analyzer lldb ]) ++ nativeBuildInputs;
 
               shellHook = ''
                 # For JetBrains CLion
