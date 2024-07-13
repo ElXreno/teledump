@@ -20,8 +20,8 @@ shellexpand = "3.1.0"
 
 tokio = { version = "1.33.0", features = ["full"] }
 
-grammers-client = { git = "https://github.com/ElXreno/grammers" }
-grammers-session = { git = "https://github.com/ElXreno/grammers" }
+grammers-client = { git = "https://github.com/Lonami/grammers" }
+grammers-session = { git = "https://github.com/Lonami/grammers" }
 
 mime = "0.3.17"
 

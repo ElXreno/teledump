@@ -341,7 +341,7 @@ impl Bot {
                                 ));
 
                                 if let Photo(photo) = media {
-                                    if photo.photo.photo.is_some() {
+                                    if photo.raw.photo.is_some() {
                                         let mut attempt = 0;
                                         while let Err(e) = message
                                             .download_media(media_path.clone().unwrap())
