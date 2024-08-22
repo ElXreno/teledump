@@ -1,0 +1,10 @@
+{
+  "git+https://github.com/Lonami/grammers#grammers-client@0.6.0": "1901rca2ww63kpcqm3sbsisrwimw5yzbnr00a6jcbxpgcnjxqvmh",
+  "git+https://github.com/Lonami/grammers#grammers-crypto@0.6.1": "1901rca2ww63kpcqm3sbsisrwimw5yzbnr00a6jcbxpgcnjxqvmh",
+  "git+https://github.com/Lonami/grammers#grammers-mtproto@0.6.0": "1901rca2ww63kpcqm3sbsisrwimw5yzbnr00a6jcbxpgcnjxqvmh",
+  "git+https://github.com/Lonami/grammers#grammers-mtsender@0.5.1": "1901rca2ww63kpcqm3sbsisrwimw5yzbnr00a6jcbxpgcnjxqvmh",
+  "git+https://github.com/Lonami/grammers#grammers-session@0.5.2": "1901rca2ww63kpcqm3sbsisrwimw5yzbnr00a6jcbxpgcnjxqvmh",
+  "git+https://github.com/Lonami/grammers#grammers-tl-gen@0.6.0": "1901rca2ww63kpcqm3sbsisrwimw5yzbnr00a6jcbxpgcnjxqvmh",
+  "git+https://github.com/Lonami/grammers#grammers-tl-parser@1.1.1": "1901rca2ww63kpcqm3sbsisrwimw5yzbnr00a6jcbxpgcnjxqvmh",
+  "git+https://github.com/Lonami/grammers#grammers-tl-types@0.6.0": "1901rca2ww63kpcqm3sbsisrwimw5yzbnr00a6jcbxpgcnjxqvmh"
+}

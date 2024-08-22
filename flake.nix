@@ -1,91 +1,51 @@
 {
-  description = "Teledump flake";
+  description = "Rust-Nix";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+    nixpkgs.url =
+      "github:NixOS/nixpkgs/216728b751c07bb6066a2b9e26d7fd700723c338"; # nixos-unstable before https://github.com/NixOS/nixpkgs/commit/cf5e2c2c9adb9ae2db58c75a50453ee7d5d6a699
 
-    rust-overlay.url = "github:oxalica/rust-overlay";
-    crate2nix = {
-      url = "github:kolloch/crate2nix";
-      flake = false;
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    crate2nix.url = "github:nix-community/crate2nix";
 
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
+    # Development
+
+    devshell = {
+      url = "github:numtide/devshell";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, rust-overlay, crate2nix, ... }:
-    let name = "teledump";
-    in flake-utils.lib.eachDefaultSystem (system:
-      let
-        # Imports
-        rust-toolchain =
-          pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+  outputs = inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems =
+        [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
-        pkgsWithouOverlays = import nixpkgs { inherit system; };
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [
-            rust-overlay.overlays.default
-            (self: super: {
-              rustc = rust-toolchain;
-              cargo = rust-toolchain;
-            })
-          ];
-        };
-        inherit (import "${crate2nix}/tools.nix" { inherit pkgs; })
-          generatedCargoNix;
+      imports =
+        [ ./nix/rust-overlay/flake-module.nix ./nix/devshell/flake-module.nix ];
 
-        # Project
-        project = pkgs.callPackage (generatedCargoNix {
-          inherit name;
-          src = ./.;
-        }) {
-          defaultCrateOverrides = pkgs.defaultCrateOverrides // {
-            ${name} = oldAttrs:
-              {
-                inherit buildInputs nativeBuildInputs;
-              } // buildEnvVars;
+      perSystem = { pkgs, ... }:
+        let
+          name = "teledump";
+          cargoNix = pkgs.callPackage ./Cargo.nix { };
+        in rec {
+          checks = {
+            teledump = cargoNix.workspaceMembers.${name}.build.override {
+              runTests = true;
+            };
+          };
+
+          packages = {
+            teledump = cargoNix.workspaceMembers.${name}.build;
+            default = packages.teledump;
           };
         };
-
-        buildInputs = with pkgs; [ openssl.dev sqlite ];
-        nativeBuildInputs = with pkgs; [ rustc cargo pkg-config ];
-        buildEnvVars = {
-          PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
-        };
-      in rec {
-        packages = {
-          ${name} = project.workspaceMembers.${name}.build;
-          default = packages.${name};
-        };
-
-        apps = {
-          ${name} = flake-utils.lib.mkApp {
-            inherit name;
-            drv = packages.${name};
-          };
-          default = apps.${name};
-        };
-
-        checks = { ${name} = packages.${name}.override { runTests = true; }; };
-
-        devShells.default = pkgs.mkShell {
-          inherit buildInputs;
-
-          nativeBuildInputs = (with pkgsWithouOverlays; [ sea-orm-cli ])
-            ++ (with pkgs; [ rustfmt rust-analyzer lldb ]) ++ nativeBuildInputs;
-
-          shellHook = ''
-            # For JetBrains CLion
-            # Set standart library path to: .rust-src/rust
-            ln -sfT ${rust-toolchain}/lib/rustlib/src ./.rust-src
-          '';
-
-          RUST_SRC_PATH = "${rust-toolchain}/lib/rustlib/src/rust/src";
-        } // buildEnvVars;
-      });
+    };
 }
